@@ -509,7 +509,7 @@ const SECTIONS=[
     {id:'core-game-object-concept',n:'3.2',en:'Core game objects',vi:'Đối tượng chính'},
     {id:'element-object-concept',n:'3.3',en:'Element objects',vi:'Đối tượng yếu tố đặc biệt'},
     {id:'booster-object-concept',n:'3.4',en:'Booster objects',vi:'Đối tượng công cụ hỗ trợ'}]},
-  {id:'sfx--haptics',n:'4',c:4,en:'SFX & haptics',vi:'Âm thanh & rung',wip:true},
+  {id:'sfx--haptics',n:'4',c:4,en:'SFX & haptics',vi:'Âm thanh & rung'},
   {id:'remote-config',n:'5',c:5,en:'Remote config',vi:'Cấu hình từ xa'},
   {id:'iap--offers',n:'6',c:8,en:'IAP & offers',vi:'Mua trong game & ưu đãi',subs:[
     {id:'pack-list',n:'6.1',en:'Pack list',vi:'Danh sách gói'},
@@ -1561,8 +1561,7 @@ function view(l){
     ['BGM In Game','ui',t('Gameplay starts','Bắt đầu vào chơi'),0],
     ['BGM Home','ui',t('The home scene is open','Đang ở màn hình chính'),0],
     ['Win Level','ui',t('The player wins the level','Người chơi thắng màn'),3],
-    ['Lose Level','ui',t('The Out of Space popup opens','Popup “Out of space” hiện ra'),3],
-    ['Revive','ui',t('The player revives (coins or RV)','Người chơi hồi sinh (xu hoặc quảng cáo)'),2],
+    ['Lose Level','ui',t('The player is temporarily stuck','Người chơi tạm thời bị kẹt'),3],
     ['Tap','ui',t('The player taps a UI button','Người chơi chạm nút giao diện'),1],
     ['Coin Reward','ui',t('The player earns coins','Người chơi nhận xu'),0],
     ['Booster Reward','ui',t('The player earns a booster','Người chơi nhận công cụ hỗ trợ'),0],
@@ -1570,17 +1569,15 @@ function view(l){
     ['Block Move 2','core',t('A block moves to a new slot and clicks in','Khối chuyển sang ô mới và khớp vào'),1],
     ['Block Move 3','core',t('A block moves to a new slot and clicks in','Khối chuyển sang ô mới và khớp vào'),1],
     ['Pop','core',t('A full slot highlights its blocks before the merge','Ô đầy làm nổi bật các khối trước khi gộp'),0],
-    ['Merge Complete','core',t('The blocks merge into 2 new blocks','Các khối gộp thành 2 khối mới'),2],
-    ['Level Progress','core',t('Level progress increases','Tiến độ màn tăng')+' '+wip,0],
+    ['Merging','core',t('The blocks are merging into one','Các khối đang gộp lại làm một'),0],
+    ['Merge Complete','core',t('The blocks merged into 2 new blocks','Các khối đã gộp thành 2 khối mới'),2],
     ['Deal','core',t('The player taps Deal','Người chơi chạm Deal'),2],
-    ['Reveal Hidden','el',t(`A ${P.el2} flips face up`,`${P.el2} lật lên`),1],
-    ['Rainbow Spawn','el',t(`A ${P.el1} appears from a deal`,`${P.el1} xuất hiện từ deal`),0],
-    ['Rainbow Transform','el',t(`A ${P.el1} transforms into a block level`,`${P.el1} biến thành một cấp khối`),1],
-    ['Booster Shuffle','bo',t(`${P.bo1} is used`,`Dùng ${P.bo1}`)+' '+wip,0],
-    ['Booster Hammer','bo',t(`${P.bo2} is used`,`Dùng ${P.bo2}`)+' '+wip,0]
+    ['Review Hidden','el',t(`${P.el2} review`,`${P.el2} review`),0],
+    ['Review Rainbow','el',t(`${P.el1} review`,`${P.el1} review`),0],
+    ['Booster Hammer','bo',t(`${P.bo2} is used`,`Dùng ${P.bo2}`),2]
   ];
-  B['sfx--haptics']=`<p class="sec-intro">${t(`From the SFX &amp; Haptics table of the original GDD. Rows marked “In progress” are still being made. ${P.bo3} has no SFX yet.`,
-      `Lấy từ bảng SFX &amp; Haptics của GDD gốc. Các dòng có nhãn “Đang viết” vẫn đang làm. ${P.bo3} chưa có SFX.`)}</p>`+
+  B['sfx--haptics']=`<p class="sec-intro">${t(`From the Game Sounds sheet, plus Merging and Booster Hammer.`,
+      `Lấy từ sheet Game Sounds, thêm Merging và Booster Hammer.`)}</p>`+
     table(t('SFX and haptics','Âm thanh và rung'),
     [t('Name','Tên'),t('Category','Nhóm'),t('Plays when','Phát khi'),t('Haptic','Rung')],
     sfx.map(r=>[`<span lang="en">${r[0]}</span>`,`<span class="cat">${cat[r[1]]}</span>`,r[2],hap(r[3])]));
@@ -1833,6 +1830,11 @@ function view(l){
   /* Add one day() block per day, newest first, with one ent per area changed */
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
+    day(t('26 October 2026','26/10/2026'),
+      ent(t('SFX &amp; haptics','Âm thanh &amp; rung'),ul([
+        t(`Updated the table to the Game Sounds sheet.`,`Cập nhật bảng theo sheet Game Sounds.`),
+        t(`Added Merging (no haptic) and Booster Hammer (medium haptic).`,`Thêm Merging (không rung) và Booster Hammer (rung vừa).`)
+      ])))+
     day(t('25 October 2026','25/10/2026'),
       ent(t('New document','Tài liệu mới'),ul([
         t(`Created this GDD from the template, with the rules of the Money Sort GDD. The game is renamed Block Sort.`,`Tạo tài liệu này từ template, dùng luật chơi trong GDD của Money Sort. Game đổi tên thành Block Sort.`),
