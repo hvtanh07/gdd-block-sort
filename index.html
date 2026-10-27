@@ -1294,23 +1294,25 @@ function view(l){
         `Đồng hồ dừng khi popup “Out of space” đang mở. Ô thuê không nằm trong checkpoint. Cấu hình từ xa: <code>rentslot_rw_per_day</code> (0 = không giới hạn).`)}</p>`))+
 
     sys(nm('Level loop back','Lặp lại màn chơi'),
-      lead(t(`After the last level, earlier levels replay. The level number keeps counting up.`,
-             `Sau màn cuối, game cho chơi lại các màn trước. Số màn vẫn tăng dần.`))+
+      lead(t(`The game has 30 levels. After level 30, the player keeps replaying level 30 with rising difficulty. The game never goes back to level 1. The level number keeps counting up.`,
+             `Game có 30 màn. Sau màn 30, người chơi tiếp tục chơi lại màn 30 với độ khó tăng dần. Game không quay lại màn 1. Số màn vẫn tăng dần.`))+
       tiles([
-        ['40',t('Last level','Màn cuối cùng')],
-        ['21',t('Loop starts from','Bắt đầu lặp từ màn')],
-        ['20',t('Levels per loop (21–40)','Số màn mỗi vòng (21–40)')]
+        ['30',t('Last level','Màn cuối cùng')],
+        ['30',t('Level that repeats','Màn được lặp lại')],
+        [t('+1 step','+1 bậc'),t('Difficulty on each replay','Độ khó mỗi lần chơi lại'),'hot']
       ])+
       panel(t('Level mapping','Cách tính màn'),
-        `<p><code>${t('content level = 21 + (shown level − 41) mod 20, for shown ≥ 41','màn nội dung = 21 + (màn hiển thị − 41) mod 20, khi hiển thị ≥ 41')}</code></p>`+
-        table(t('Level loop back examples','Ví dụ lặp lại màn'),[t('Shown level','Màn hiển thị'),'40','41','42','…','60','61'],
-          [[t('Content level','Màn nội dung'),'40','21','22','…','40','21']],'compact'))+
+        `<p><code>${t('content level = 30, difficulty step = shown level − 30, for shown ≥ 31','màn nội dung = 30, bậc độ khó = màn hiển thị − 30, khi hiển thị ≥ 31')}</code></p>`+
+        table(t('Level loop back examples','Ví dụ lặp lại màn'),[t('Shown level','Màn hiển thị'),'29','30','31','32','…','40'],
+          [[t('Content level','Màn nội dung'),'29','30','30','30','…','30'],
+           [t('Difficulty step','Bậc độ khó'),dash,dash,'+1','+2','…','+10']],'compact'))+
       panel(t('Rules','Quy tắc'),ul([
+        t(`Each replay of level 30 is harder than the one before. What gets harder and by how much: TBD.`,`Mỗi lần chơi lại màn 30 khó hơn lần trước. Cái gì khó hơn và khó hơn bao nhiêu: TBD.`),
         t(`All UI and level checks (offers, Skip Level, remote config) use the shown level.`,`Mọi giao diện và điều kiện theo màn (ưu đãi, Bỏ qua màn, cấu hình từ xa) dùng màn hiển thị.`),
         t(`Looped levels play like any level: same rewards, bonus, hearts, revive.`,`Màn lặp chơi như mọi màn: cùng thưởng, thưởng thêm, tim, hồi sinh.`),
         t(`An update that adds levels: players inside the new range play the real level.`,`Bản cập nhật thêm màn: người chơi trong khoảng màn mới chơi đúng màn đó.`),
-        t(`Analytics logs both shown and content level.`,`Analytics ghi cả màn hiển thị và màn nội dung.`)
-      ])+`<p class="note">${t(`Remote config: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`,`Cấu hình từ xa: <code>level_loop_last_level</code>, <code>level_loop_start_level</code>.`)}</p>`))+
+        t(`Analytics logs the shown level, the content level and the difficulty step.`,`Analytics ghi màn hiển thị, màn nội dung và bậc độ khó.`)
+      ])+`<p class="note">${t(`Remote config: <code>level_loop_last_level</code> (30), <code>level_loop_start_level</code> (30).`,`Cấu hình từ xa: <code>level_loop_last_level</code> (30), <code>level_loop_start_level</code> (30).`)}</p>`))+
 
     sys(nm('Revive','Hồi sinh'),
       lead(t(`When the player loses, the Out of Space popup offers one more chance on the same attempt.`,
@@ -1611,8 +1613,8 @@ function view(l){
       ['revive_max_per_level',t('Max revives per level attempt. 0 = no cap.','Số lần hồi sinh tối đa mỗi lượt chơi màn. 0 = không giới hạn.'),'0',t('count','lần')]
     ])+
     rc(t('Level loop back','Lặp lại màn chơi'),[
-      ['level_loop_last_level',t('Last level. After it, the game loops back.','Màn cuối cùng. Sau màn này, game quay lại lặp màn.'),'40',t('level','màn')],
-      ['level_loop_start_level',t('Level the loop starts from','Màn bắt đầu vòng lặp'),'21',t('level','màn')]
+      ['level_loop_last_level',t('Last level. After it, the game loops back.','Màn cuối cùng. Sau màn này, game quay lại lặp màn.'),'30',t('level','màn')],
+      ['level_loop_start_level',t('Level the loop starts from. 30 = only level 30 repeats.','Màn bắt đầu vòng lặp. 30 = chỉ lặp lại màn 30.'),'30',t('level','màn')]
     ])+
     rc(t('Lives','Mạng'),[
       ['lives_max',t('Maximum lives','Số mạng tối đa'),'5',lives],
@@ -1866,6 +1868,9 @@ function view(l){
   const day=(title,body)=>`<div class="sub"><h3><span>${title}</span></h3>${body}</div>`;
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
     day(t('27 October 2026','27/10/2026'),
+      ent(t('Level loop back','Lặp lại màn chơi'),ul([
+        t(`Level loop back: the game has 30 levels. After level 30, level 30 repeats with rising difficulty, never back to level 1. <code>level_loop_last_level</code> = 30, <code>level_loop_start_level</code> = 30.`,`Lặp lại màn chơi: game có 30 màn. Sau màn 30, lặp lại màn 30 với độ khó tăng dần, không quay lại màn 1. <code>level_loop_last_level</code> = 30, <code>level_loop_start_level</code> = 30.`)
+      ]))+
       ent(t('Packs and offer popups','Gói và popup ưu đãi'),ul([
         t(`Pack list (6.1) follows the new pack table: product IDs now use <code>blockery_</code>, Remove Ads Pack is 2,500 gold + Play Offline for $7.99, Gold Packs are 1,000 / 5,000 / 11,500 / 30,000 / 70,000 / 150,000. Added the Gold Brick Package! row.`,`Danh sách gói (6.1) theo bảng gói mới: mã sản phẩm dùng <code>blockery_</code>, Remove Ads Pack gồm 2.500 vàng + Chơi offline giá $7,99, các Gói vàng là 1.000 / 5.000 / 11.500 / 30.000 / 70.000 / 150.000. Thêm dòng Gold Brick Package!.`),
         t(`Remove Ads detail (6.4) updated to match.`,`Cập nhật phần chi tiết Gỡ quảng cáo (6.4) cho khớp.`),
