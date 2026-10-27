@@ -1303,16 +1303,16 @@ function view(l){
       ])+
       panel(t('Level mapping','Cách tính màn'),
         `<p><code>${t('content level = 30, difficulty step = shown level − 30, for shown ≥ 31','màn nội dung = 30, bậc độ khó = màn hiển thị − 30, khi hiển thị ≥ 31')}</code></p>`+
-        table(t('Level loop back examples','Ví dụ lặp lại màn'),[t('Shown level','Màn hiển thị'),'29','30','31','32','…','40'],
-          [[t('Content level','Màn nội dung'),'29','30','30','30','…','30'],
-           [t('Difficulty step','Bậc độ khó'),dash,dash,'+1','+2','…','+10']],'compact'))+
+        table(t('Level loop back examples','Ví dụ lặp lại màn'),[t('Shown level','Màn hiển thị'),'29','30','31','32','33','…','30 + n'],
+          [[t('Content level','Màn nội dung'),'29','30','30','30','30','…','30'],
+           [t('Difficulty step','Bậc độ khó'),dash,dash,'+1','+2','+3','…','+n']],'compact'))+
       panel(t('Rules','Quy tắc'),ul([
         t(`Each replay of level 30 is harder than the one before. What gets harder and by how much: TBD.`,`Mỗi lần chơi lại màn 30 khó hơn lần trước. Cái gì khó hơn và khó hơn bao nhiêu: TBD.`),
         t(`All UI and level checks (offers, Skip Level, remote config) use the shown level.`,`Mọi giao diện và điều kiện theo màn (ưu đãi, Bỏ qua màn, cấu hình từ xa) dùng màn hiển thị.`),
         t(`Looped levels play like any level: same rewards, bonus, hearts, revive.`,`Màn lặp chơi như mọi màn: cùng thưởng, thưởng thêm, tim, hồi sinh.`),
         t(`An update that adds levels: players inside the new range play the real level.`,`Bản cập nhật thêm màn: người chơi trong khoảng màn mới chơi đúng màn đó.`),
         t(`Analytics logs the shown level, the content level and the difficulty step.`,`Analytics ghi màn hiển thị, màn nội dung và bậc độ khó.`)
-      ])+`<p class="note">${t(`Remote config: <code>level_loop_last_level</code> (30), <code>level_loop_start_level</code> (30).`,`Cấu hình từ xa: <code>level_loop_last_level</code> (30), <code>level_loop_start_level</code> (30).`)}</p>`))+
+      ])+`<p class="note">${t(`The last level (30) and the repeated level (30) are fixed. They are not remote config values.`,`Màn cuối (30) và màn lặp lại (30) là cố định, không nằm trong cấu hình từ xa.`)}</p>`))+
 
     sys(nm('Revive','Hồi sinh'),
       lead(t(`When the player loses, the Out of Space popup offers one more chance on the same attempt.`,
@@ -1330,26 +1330,26 @@ function view(l){
       panel(t('Out of Space popup','Popup “Out of space”'),
         table(t('Out of Space choices','Lựa chọn của popup Out of space'),[t('Choice','Lựa chọn'),t('Cost','Giá'),t('Result','Kết quả')],[
           [t('Watch RV','Xem quảng cáo'),t('Free','Miễn phí'),t('Revive. No ad available: show “No ad available”, the popup stays open.','Hồi sinh. Không có quảng cáo: hiện “No ad available”, popup vẫn mở.')],
-          [t('Pay coins','Trả xu'),t(`<code>revive_base_cost</code> (250)`,`<code>revive_base_cost</code> (250)`),t('Revive. Not enough coins → store, then back.','Hồi sinh. Không đủ xu → cửa hàng, rồi quay lại.')],
+          [t('Pay coins','Trả xu'),t(`<code>revive_coin_cost</code> (250)`,`<code>revive_coin_cost</code> (250)`),t('Revive. Not enough coins → store, then back.','Hồi sinh. Không đủ xu → cửa hàng, rồi quay lại.')],
           [t('Close / Give up','Đóng / Bỏ cuộc'),dash,t('The board resets to the level checkpoint, progress goes back to 0%, the level starts again.','Bàn chơi về checkpoint của màn, tiến độ về 0%, chơi lại màn từ đầu.')]
         ],'compact'))+
       panel(t('On revive','Khi hồi sinh'),ol([
         t(`<b>Check for a merge.</b> A level has 10 or more revealed blocks: run ${P.bo1} as normal. It fills one slot with 10 of that level, which merges at once.`,
           `<b>Kiểm tra gộp.</b> Có cấp đủ 10 khối lộ trở lên: chạy ${P.bo1} như bình thường. ${P.bo1} gom 10 khối cấp đó vào một ô, ô đó gộp ngay.`),
-        t(`<b>Block swap</b> (no level has 10+). Pick 2 random levels among the revealed blocks. For each level L, change <code>10 − count of L</code> random revealed blocks of other levels into L. Then run ${P.bo1}.`,
-          `<b>Đổi khối</b> (không cấp nào đủ 10). Chọn ngẫu nhiên 2 cấp trong các khối đang lộ. Với mỗi cấp L, đổi <code>10 − số khối cấp L</code> khối lộ ngẫu nhiên thuộc cấp khác thành cấp L. Sau đó chạy ${P.bo1}.`)+ul([
+        t(`<b>Block swap</b> (no level has 10+). Before ${P.bo1}, the game makes 2 merges. Pick 2 random levels among the revealed blocks. For each level L: <code>need = 10 − count of L</code>. Pick <code>need</code> random revealed blocks that are not one of the 2 picked levels, and change them into L. Then run ${P.bo1}: each completed level fills a slot with 10 blocks and merges.`,
+          `<b>Đổi khối</b> (không cấp nào đủ 10). Trước khi chạy ${P.bo1}, game tạo 2 lần gộp. Chọn ngẫu nhiên 2 cấp trong các khối đang lộ. Với mỗi cấp L: <code>cần = 10 − số khối cấp L</code>. Chọn ngẫu nhiên <code>cần</code> khối lộ không thuộc 2 cấp đã chọn, đổi chúng thành cấp L. Sau đó chạy ${P.bo1}: mỗi cấp đã đủ sẽ lấp một ô 10 khối và gộp.`)+ul([
           t(`${P.el2}s and ${P.el1}s are never swapped.`,`Không bao giờ đổi ${P.el2} và ${P.el1}.`),
           t(`Only 1 level on the board: pick only that level.`,`Bàn chỉ có 1 cấp: chỉ chọn cấp đó.`),
           t(`Not enough blocks for both: complete 1 level fully, fill the other as far as possible.`,`Không đủ khối cho cả hai: làm đủ 1 cấp, cấp còn lại đổi được bao nhiêu thì đổi.`)
         ]),
         t(`<b>Resolve.</b> Run the Action Resolution Order. Each merge turns 10 blocks into 2 and frees 8 spaces.`,`<b>Xử lý.</b> Chạy Thứ tự xử lý. Mỗi lần gộp biến 10 khối thành 2, trống ra 8 chỗ.`),
-        t(`<b>Space guarantee.</b> Still no free space (e.g. ${P.el2}s at the bottom of every slot): clear the slot with the most ${P.el2}s, the same way ${P.bo2} does.`,
-          `<b>Đảm bảo chỗ trống.</b> Vẫn chưa có chỗ trống (ví dụ ô nào cũng có ${P.el2} ở đáy): dọn ô có nhiều ${P.el2} nhất, giống cách ${P.bo2} làm.`),
+        t(`<b>Space guarantee.</b> The revive still frees no space (e.g. ${P.el2}s at the bottom of every slot, so no 10-block stack can form): clear the slot with the most ${P.el2}s, the same way ${P.bo2} does.`,
+          `<b>Đảm bảo chỗ trống.</b> Hồi sinh xong vẫn chưa có chỗ trống (ví dụ ô nào cũng có ${P.el2} ở đáy nên không thể có chồng 10 khối): dọn ô có nhiều ${P.el2} nhất, giống cách ${P.bo2} làm.`),
         t(`Unpause. The Rent Slot countdown resumes.`,`Bỏ tạm dừng. Đồng hồ ô thuê chạy tiếp.`)
       ])+ul([
         t(`The free ${P.bo1} is not taken from the inventory, and works even if ${P.bo1} is not owned or unlocked.`,`${P.bo1} miễn phí không trừ vào kho, và vẫn chạy dù chưa có hay chưa mở ${P.bo1}.`),
         t(`Merges made by a revive count toward level progress, including target creations.`,`Các lần gộp do hồi sinh tạo ra vẫn tính tiến độ, kể cả tạo mục tiêu.`),
-        t(`Limits: <code>revive_max_per_level</code> (0 = no cap) per level attempt. <code>revive_rv_enabled</code> shows or hides the Watch RV option.`,`Giới hạn: <code>revive_max_per_level</code> (0 = không giới hạn) mỗi lượt chơi màn. <code>revive_rv_enabled</code> bật hoặc ẩn lựa chọn xem quảng cáo.`)
+        t(`Remote config: <code>revive_coin_cost</code> (250), <code>revive_rv_enabled</code> (true), <code>revive_swap_level_count</code> (2), <code>revive_max_per_level</code> (0 = no cap, per level attempt).`,`Cấu hình từ xa: <code>revive_coin_cost</code> (250), <code>revive_rv_enabled</code> (true), <code>revive_swap_level_count</code> (2), <code>revive_max_per_level</code> (0 = không giới hạn, mỗi lượt chơi màn).`)
       ])));
 
   const bst=t('Boosters','Booster');
@@ -1605,16 +1605,10 @@ function view(l){
       ['level_win_ad_multiplier',t('Reward multiplier when the player watches the reward ad','Hệ số nhân thưởng khi người chơi xem quảng cáo thưởng'),'2.0×','×']
     ])+
     rc(t('Revive','Hồi sinh'),[
-      ['revive_base_cost',t('Coin cost of one revive (revive_coin_cost in the original GDD)','Số xu cho một lần hồi sinh (revive_coin_cost trong GDD gốc)'),'250',coin],
-      ['revive_cost_growth',t('Revive cost growth (next revive = current cost × this)','Mức tăng giá hồi sinh (lần sau = giá hiện tại × hệ số này)'),'1.00×','×'],
-      ['revive_max_ads_per_attempt',t('Max revives by ad in one attempt','Số lần hồi sinh bằng quảng cáo tối đa trong một lượt chơi'),'1',t('count','lần')],
+      ['revive_coin_cost',t('Coin price for one revive','Số xu cho một lần hồi sinh'),'250',coin],
       ['revive_rv_enabled',t('Show the Watch RV option on the Out of Space popup','Hiện lựa chọn xem quảng cáo trên popup Out of space'),'true',t('on/off','bật/tắt')],
       ['revive_swap_level_count',t('Levels the block swap completes when no level has 10+ blocks','Số cấp mà bước đổi khối làm đủ khi không cấp nào có từ 10 khối'),'2',t('levels','cấp')],
       ['revive_max_per_level',t('Max revives per level attempt. 0 = no cap.','Số lần hồi sinh tối đa mỗi lượt chơi màn. 0 = không giới hạn.'),'0',t('count','lần')]
-    ])+
-    rc(t('Level loop back','Lặp lại màn chơi'),[
-      ['level_loop_last_level',t('Last level. After it, the game loops back.','Màn cuối cùng. Sau màn này, game quay lại lặp màn.'),'30',t('level','màn')],
-      ['level_loop_start_level',t('Level the loop starts from. 30 = only level 30 repeats.','Màn bắt đầu vòng lặp. 30 = chỉ lặp lại màn 30.'),'30',t('level','màn')]
     ])+
     rc(t('Lives','Mạng'),[
       ['lives_max',t('Maximum lives','Số mạng tối đa'),'5',lives],
@@ -1869,7 +1863,12 @@ function view(l){
   B['change-note']=`<p class="sec-intro">${t('Changes made to this GDD, newest day first.','Các thay đổi của tài liệu này, ngày mới nhất ở trên cùng.')}</p>`+
     day(t('27 October 2026','27/10/2026'),
       ent(t('Level loop back','Lặp lại màn chơi'),ul([
-        t(`Level loop back: the game has 30 levels. After level 30, level 30 repeats with rising difficulty, never back to level 1. <code>level_loop_last_level</code> = 30, <code>level_loop_start_level</code> = 30.`,`Lặp lại màn chơi: game có 30 màn. Sau màn 30, lặp lại màn 30 với độ khó tăng dần, không quay lại màn 1. <code>level_loop_last_level</code> = 30, <code>level_loop_start_level</code> = 30.`)
+        t(`Level loop back: the game has 30 levels. Level 30 is the last level. After it, level 30 repeats with rising difficulty, never back to level 1.`,`Lặp lại màn chơi: game có 30 màn. Màn 30 là màn cuối. Sau màn này, lặp lại màn 30 với độ khó tăng dần, không quay lại màn 1.`),
+        t(`Removed <code>level_loop_last_level</code> and <code>level_loop_start_level</code> from remote config. Both values are fixed at 30.`,`Bỏ <code>level_loop_last_level</code> và <code>level_loop_start_level</code> khỏi cấu hình từ xa. Cả hai cố định ở 30.`)
+      ]))+
+      ent(t('Revive','Hồi sinh'),ul([
+        t(`Revive follows the original GDD: 1 free ${P.bo1}, block swap of 2 levels (swapped blocks never come from the 2 picked levels), resolve, space guarantee.`,`Hồi sinh theo GDD gốc: 1 ${P.bo1} miễn phí, đổi khối cho 2 cấp (không lấy khối từ 2 cấp đã chọn), xử lý, đảm bảo chỗ trống.`),
+        t(`Revive remote config now matches the original GDD: <code>revive_coin_cost</code>, <code>revive_rv_enabled</code>, <code>revive_swap_level_count</code>, <code>revive_max_per_level</code>. Removed <code>revive_cost_growth</code> and <code>revive_max_ads_per_attempt</code>.`,`Cấu hình từ xa của hồi sinh khớp GDD gốc: <code>revive_coin_cost</code>, <code>revive_rv_enabled</code>, <code>revive_swap_level_count</code>, <code>revive_max_per_level</code>. Bỏ <code>revive_cost_growth</code> và <code>revive_max_ads_per_attempt</code>.`)
       ]))+
       ent(t('Packs and offer popups','Gói và popup ưu đãi'),ul([
         t(`Pack list (6.1) follows the new pack table: product IDs now use <code>blockery_</code>, Remove Ads Pack is 2,500 gold + Play Offline for $7.99, Gold Packs are 1,000 / 5,000 / 11,500 / 30,000 / 70,000 / 150,000. Added the Gold Brick Package! row.`,`Danh sách gói (6.1) theo bảng gói mới: mã sản phẩm dùng <code>blockery_</code>, Remove Ads Pack gồm 2.500 vàng + Chơi offline giá $7,99, các Gói vàng là 1.000 / 5.000 / 11.500 / 30.000 / 70.000 / 150.000. Thêm dòng Gold Brick Package!.`),
