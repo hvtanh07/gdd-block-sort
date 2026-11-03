@@ -1626,8 +1626,8 @@ function view(l){
     ])+
     rc(t('Unlock popups — offer unlock level','Popup mở khóa — màn mở ưu đãi'),[
       ['starter_pack_unlock_level',t('Starter Pack (IAP) — level from which the offer popup can show','Gói Khởi đầu (IAP) — màn bắt đầu có thể hiện popup ưu đãi'),'7',t('level','màn')],
-      ['remove_ads_unlock_level',t('Remove Ads (IAP) — level from which the offer popup can show','Gỡ quảng cáo (IAP) — màn bắt đầu có thể hiện popup ưu đãi'),'12',t('level','màn')],
-      ['garage_gift_unlock_level',t('Gold Brick Package! (rewarded ad) — level from which the gift popup can show','Gold Brick Package! (quảng cáo thưởng) — màn bắt đầu có thể hiện popup quà'),'5',t('level','màn')]
+      ['remove_ads_unlock_level',t('Remove Ads (IAP) — level from which the offer popup can show','Gỡ quảng cáo (IAP) — màn bắt đầu có thể hiện popup ưu đãi'),'7',t('level','màn')],
+      ['garage_gift_unlock_level',t('Gold Brick Package! (rewarded ad) — level from which the gift popup can show','Gold Brick Package! (quảng cáo thưởng) — màn bắt đầu có thể hiện popup quà'),'8',t('level','màn')]
     ])+
     rc(t('Live ops','Live Ops'),[
       ['skip_level_max_per_day',t('Skip Level — max skips per day (ad or coins). The count resets each new day.','Bỏ qua màn — số lần bỏ qua tối đa mỗi ngày (bằng quảng cáo hoặc xu). Số lần được tính lại mỗi ngày mới.'),'3',t('count','lần')],
@@ -1718,13 +1718,13 @@ function view(l){
       t(`1st: start of level 7`,`Lần đầu: đầu màn 7`),
       t(`Every session start while the 72 h run`,`Mỗi lần mở game khi còn 72 giờ`),
       t(`72 h from the 1st popup, then gone. Priority 1, never blocked.`,`72 giờ từ popup đầu, sau đó mất hẳn. Ưu tiên 1, không bị chặn.`),see('starter-pack','6.3')],
-    [nm('Remove Ads','Gỡ quảng cáo'),`IAP<br>${pid('removeads')}`,lvl(12),
-      t(`1st: Level Complete with the 1st interstitial after level 12`,`Lần đầu: Level Complete có quảng cáo xen kẽ đầu tiên sau màn 12`),
+    [nm('Remove Ads','Gỡ quảng cáo'),`IAP<br>${pid('removeads')}`,lvl(7),
+      t(`1st: Level Complete with the 1st interstitial after level 7`,`Lần đầu: Level Complete có quảng cáo xen kẽ đầu tiên sau màn 7`),
       t(`Every 4 interstitials (2nd–4th), every 8 (5th +)`,`Mỗi 4 quảng cáo xen kẽ (lần 2–4), mỗi 8 (từ lần 5)`),
       t(`2nd–4th: 20 min cooldown or new session. 5th +: 2 a day. Priority 2. Stops once bought.`,`Lần 2–4: chờ 20 phút hoặc phiên mới. Từ lần 5: 2 lần/ngày. Ưu tiên 2. Dừng khi đã mua.`),see('remove-ads','6.4')],
     [t('Rewarded-ad and coin popups','Popup quảng cáo có thưởng và xu')],
-    [nm('Gold Brick Package!','Gold Brick Package!'),t('Rewarded ad','Quảng cáo có thưởng'),lvl(5),
-      t(`1st: Level Complete of level 5`,`Lần đầu: Level Complete màn 5`),
+    [nm('Gold Brick Package!','Gold Brick Package!'),t('Rewarded ad','Quảng cáo có thưởng'),lvl(8),
+      t(`1st: Level Complete of level 8`,`Lần đầu: Level Complete màn 8`),
       t(`1st Level Complete or new game session after the 4 h cooldown`,`Level Complete hoặc phiên chơi mới đầu tiên sau cooldown 4 giờ`),
       t(`Once per cycle. 10 min to claim. Priority 3.`,`1 lần mỗi chu kỳ. 10 phút để nhận. Ưu tiên 3.`),see('limited-time-reward','7.3')],
     [nm('Skip Level','Bỏ qua màn'),t('Rewarded ad or coins','Quảng cáo có thưởng hoặc xu'),t('Always','Luôn có'),
@@ -1799,7 +1799,7 @@ function view(l){
       tiles([[t('No ads','Không QC'),t('Interstitials and banners','Xen kẽ và banner')],[t('Offline','Offline'),t('Play offline','Chơi offline')],['2,500',t('Gold','Vàng')],['$7.99',t('Price','Giá'),'hot']])+
       panel(t('Popup appear logic','Logic hiện popup'),
         table(t('Remove Ads popup appear logic','Logic hiện popup Gỡ quảng cáo'),[t('Popup shows','Lần hiện'),t('Trigger','Điều kiện'),t('Hard cap','Giới hạn')],[
-          [t('1st','Lần 1'),t('Level Complete with the 1st interstitial after level 12','Level Complete có quảng cáo xen kẽ đầu tiên sau màn 12'),t('Once','1 lần')],
+          [t('1st','Lần 1'),t('Level Complete with the 1st interstitial after level 7','Level Complete có quảng cáo xen kẽ đầu tiên sau màn 7'),t('Once','1 lần')],
           [t('2nd–4th','Lần 2–4'),t('Every 4 interstitials','Mỗi 4 quảng cáo xen kẽ'),t('20 min cooldown after each popup, or until a new session','Chờ 20 phút sau mỗi lần hiện, hoặc tới phiên chơi mới')],
           [t('5th +','Từ lần 5'),t('Every 8 interstitials','Mỗi 8 quảng cáo xen kẽ'),t('Max 2 a day, resets after 24 h','Tối đa 2 lần/ngày, tính lại sau 24 giờ')],
           [t('End','Kết thúc'),t('Bought','Đã mua'),t('Never shows again','Không hiện lại')]
@@ -1808,7 +1808,7 @@ function view(l){
       kv([
         [t('Popup priority','Ưu tiên popup'),t(`Highest on the level complete screen. Never blocked, because Starter Pack no longer shows there.`,`Cao nhất ở màn hình hoàn thành màn. Không bị chặn, vì Starter Pack không còn hiện ở đó.`)],
         [t('Store & Icon','Cửa hàng & Biểu tượng'),ul([
-          t(`<b>Store:</b> offer there from the start, even before level 12. Bought first: popup never shows. Hides once bought.`,`<b>Cửa hàng:</b> ưu đãi có ngay từ đầu, kể cả trước màn 12. Mua trước: popup không bao giờ hiện. Ẩn khi đã mua.`),
+          t(`<b>Store:</b> offer there from the start, even before level 7. Bought first: popup never shows. Hides once bought.`,`<b>Cửa hàng:</b> ưu đãi có ngay từ đầu, kể cả trước màn 7. Mua trước: popup không bao giờ hiện. Ẩn khi đã mua.`),
           t(`<b>Icon:</b> Home icon only after the 1st popup. Hides once bought.`,`<b>Biểu tượng:</b> ở màn hình chính, chỉ sau popup đầu. Ẩn khi đã mua.`)])],
         [t('Restore','Khôi phục'),'Non-consumable'],
         [t('Product ID','Mã sản phẩm'),pid('removeads')]
@@ -1821,7 +1821,7 @@ function view(l){
   B['limited-time-reward']=
     sys(nm('Gold Brick Package!','Gold Brick Package!'),
       lead(t(`A free gift claimed with a rewarded ad. Shows once per cycle, at the 1st Level Complete or new game session after the cooldown.`,`Quà miễn phí nhận bằng quảng cáo có thưởng. Hiện 1 lần mỗi chu kỳ, ở Level Complete hoặc phiên chơi mới đầu tiên sau khi hết cooldown.`))+
-      tiles([[`200 + 1`,t('Gold + booster','Vàng + công cụ')],[t('10 min','10 phút'),t('Timer, from when it shows','Timer, tính từ lúc hiện')],[t('4 h','4 giờ'),t('Cooldown after the timer','Cooldown sau khi hết timer')],[t('Level 5','Màn 5'),t('Unlocks','Mở khóa')]])+
+      tiles([[`200 + 1`,t('Gold + booster','Vàng + công cụ')],[t('10 min','10 phút'),t('Timer, from when it shows','Timer, tính từ lúc hiện')],[t('4 h','4 giờ'),t('Cooldown after the timer','Cooldown sau khi hết timer')],[t('Level 8','Màn 8'),t('Unlocks','Mở khóa')]])+
       panel(t('Popup appear logic','Logic hiện popup'),
         table(t('Gold Brick Package! cycle','Chu kỳ Gold Brick Package!'),[t('State','Trạng thái'),t('Player sees','Người chơi thấy'),t('Next','Tiếp theo')],[
           [t('Cooldown','Cooldown'),t('Nothing. 4 h runs, also offline.','Không có gì. Đếm 4 giờ, kể cả khi offline.'),t('Ends → Ready','Hết giờ → Chờ hiện')],
@@ -1830,7 +1830,7 @@ function view(l){
           [t('Timer over','Hết timer'),dash,t('→ Cooldown (new 4 h)','→ Cooldown (4 giờ mới)')]
         ],'compact')+
         ul([
-          t(`1st cycle: Level Complete of level 5.`,`Chu kỳ đầu: Level Complete màn 5.`),
+          t(`1st cycle: Level Complete of level 8.`,`Chu kỳ đầu: Level Complete màn 8.`),
           t(`Once per cycle, so it never shows back to back.`,`1 lần mỗi chu kỳ, để không hiện liên tục.`),
           t(`The 10 min timer only starts after the player sees the popup.`,`Timer 10 phút chỉ bắt đầu sau khi người chơi thấy popup.`),
           t(`Cooldown ended offline: shows when the player starts a new game session.`,`Cooldown hết khi offline: hiện khi người chơi mở phiên chơi mới.`),
@@ -1865,6 +1865,9 @@ function view(l){
       ent(t('Starter Pack','Gói Khởi đầu'),ul([
         t(`1st popup now shows at the start of level 7, not at Level Complete of level 7 (6.3, 7.1).`,`Popup đầu tiên giờ hiện ở đầu màn 7, không còn ở Level Complete màn 7 (6.3, 7.1).`),
         t(`Popup priority (7.2): Starter Pack is no longer on the level complete screen. That screen is now Remove Ads > Gold Brick Package!, and Remove Ads is never blocked.`,`Thứ tự ưu tiên popup (7.2): Starter Pack không còn ở màn hình hoàn thành màn. Màn hình đó giờ là Remove Ads > Gold Brick Package!, và Remove Ads không bao giờ bị chặn.`)
+      ]))+
+      ent(t('Popup unlock levels','Màn mở popup'),ul([
+        t(`Remove Ads unlocks at level 7 (was 12). Gold Brick Package! unlocks at level 8 (was 5). Updated in 6.4, 7.1, 7.3 and remote config.`,`Remove Ads mở ở màn 7 (trước là 12). Gold Brick Package! mở ở màn 8 (trước là 5). Đã cập nhật ở 6.4, 7.1, 7.3 và cấu hình từ xa.`)
       ])))+
     day(t('27 October 2026','27/10/2026'),
       ent(t('Level loop back','Lặp lại màn chơi'),ul([
